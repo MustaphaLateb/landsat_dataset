@@ -19,10 +19,13 @@ cd $here
 stack="L*stack"
 TC="L*BGW.tif"
 
+mtl=$(find ./ -name 'L*MTL.txt' | head -1)
+utm=$(grep "UTM_ZONE" $mtl | tr -d ' ' | awk -F '=' '{ print $2 }')
+
 landsat_stack.py -q -p --files "$stack; $TC; $stack" \
     -b "1 2 3 4 5 6 7; 1 2 3; 8" \
     -n "-9999 -9999 -9999 -9999 -9999 -9999 -9999; -9999 -9999 -9999; 1" \
-    --utm 10 -o "*_all" \
+    --utm $utm -o "*_all" \
     --format "ENVI" --co "INTERLEAVE=BIP" --max_extent ./
 
 
